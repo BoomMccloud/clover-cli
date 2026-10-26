@@ -17,7 +17,7 @@ The supported user-facing command is `diffuspace clover`.
    For a downloaded release tarball instead, run:
 
    ```sh
-   npm install -g ./diffuspace-cli-0.1.8.tgz
+   npm install -g ./diffuspace-cli-0.1.9.tgz
    ```
 
 3. Ask the user to run `diffuspace clover` in their own terminal. It prompts for

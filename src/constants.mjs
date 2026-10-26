@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 
 export const CLI_VERSION = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
 export const FEEDBACK_URL = 'https://huggingface.co/Diffuspace';
-export const UPSTREAM_URL = 'https://api.diffuspace.ai:30090/v1';
+export const UPSTREAM_URL = 'https://api.diffuspace.ai/v1';
 export const MODEL_ID = 'clover-10-23';
 export const CONTEXT_WINDOW = 128000;
 export const TESTED_CODEX_VERSION = '0.164.0';

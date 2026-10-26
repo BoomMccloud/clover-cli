@@ -1,6 +1,6 @@
 {
   "name": "@diffuspace/cli",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Launch Codex with DiffuSpace Clover through a local compatibility adapter",
   "type": "module",
   "engines": {

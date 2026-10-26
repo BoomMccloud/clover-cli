@@ -2,10 +2,11 @@
 
 ## Current work
 
-Standalone source for @diffuspace/cli, version 0.1.8. The command
+Standalone source for @diffuspace/cli, version 0.1.9. The command
 `diffuspace clover` asks for an API key on first run, starts an authenticated
 localhost adapter, and launches the Clover Codex profile. Endpoint and model ID
-are fixed. Context is 128,000 tokens. Claude Code is out of scope.
+are fixed. The upstream base URL is `https://api.diffuspace.ai/v1`, without a
+custom port. Context is 128,000 tokens. Claude Code is out of scope.
 
 The source previously lived in diffusion-demo/packages/diffuspace-cli. Treat this
 standalone repository as the source of truth for future CLI changes.

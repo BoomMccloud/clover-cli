@@ -35,7 +35,7 @@ diffuspace clover
 ```
 
 From a downloaded release tarball, use
-`npm install -g ./diffuspace-cli-0.1.8.tgz`.
+`npm install -g ./diffuspace-cli-0.1.9.tgz`.
 
 For agent-assisted installation, share
 [INSTALL.md](https://github.com/BoomMccloud/clover-cli/blob/main/INSTALL.md).
@@ -110,7 +110,7 @@ on each invocation and takes precedence over the saved key.
 
 Do not commit credentials or paste keys into chat. The local adapter binds only to
 `127.0.0.1`, uses a random bearer token per launch, and forwards the real key only
-to `https://api.diffuspace.ai:30090/v1`. It does not log prompts or credentials.
+to `https://api.diffuspace.ai/v1`. It does not log prompts or credentials.
 Your prompts and tool outputs are sent to DiffuSpace for inference.
 
 ## Compatibility
