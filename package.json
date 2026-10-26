@@ -1,6 +1,6 @@
 {
   "name": "@diffuspace/cli",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Launch Codex with DiffuSpace Clover through a local compatibility adapter",
   "type": "module",
   "engines": {
@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "test": "node --test test/*.test.mjs",
-    "check": "node --check bin/diffuspace.mjs && node --check src/adapter.mjs && node --check src/config.mjs && node --check src/launch.mjs && node --check src/protocol.mjs && node --check src/messages.mjs"
+    "check": "node --check bin/diffuspace.mjs && node --check src/adapter.mjs && node --check src/config.mjs && node --check src/launch.mjs && node --check src/protocol.mjs && node --check src/messages.mjs && node --check src/session.mjs"
   },
   "repository": {
     "type": "git",

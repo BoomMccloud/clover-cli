@@ -2,7 +2,7 @@
 
 ## Current work
 
-Standalone source for @diffuspace/cli, version 0.1.9. The command
+Standalone source for @diffuspace/cli, version 0.1.10. The command
 `diffuspace clover` asks for an API key on first run, starts an authenticated
 localhost adapter, and launches the Clover Codex profile. Endpoint and model ID
 are fixed. The upstream base URL is `https://api.diffuspace.ai/v1`, without a
@@ -10,6 +10,12 @@ custom port. Context is 128,000 tokens. Claude Code is out of scope.
 
 The source previously lived in diffusion-demo/packages/diffuspace-cli. Treat this
 standalone repository as the source of truth for future CLI changes.
+
+Version 0.1.10 adds a final `diffuspace clover -- resume <id>` hint after
+successful interactive exits. Preserve TTY inheritance and exec stdout.
+Codex's native resume line remains; the Clover command is printed afterward.
+Verified with 23 passing tests and a real interactive Codex 0.164.0 session: the
+final Clover resume command contained the exact same session UUID as Codex.
 
 ## Verification
 

@@ -1,6 +1,7 @@
 import http from 'node:http';
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { once } from 'node:events';
+import { requestSessionId } from './session.mjs';
 import { UPSTREAM_URL, modelCatalog } from './constants.mjs';
 import { CompatibilityError, parseSSE, restoreResponse, translateRequest } from './protocol.mjs';
 
@@ -23,7 +24,7 @@ function sendJSON(res, status, body) {
   res.writeHead(status, { 'content-type': 'application/json', 'cache-control': 'no-store' });
   res.end(JSON.stringify(body));
 }
-export async function startAdapter({ apiKey, upstreamURL = UPSTREAM_URL, fetchImpl = fetch, onError = () => {} }) {
+export async function startAdapter({ apiKey, upstreamURL = UPSTREAM_URL, fetchImpl = fetch, onError = () => {}, onSessionId = () => {} }) {
   if (!apiKey) throw new Error('DiffuSpace API key is missing.');
   const token = randomBytes(32).toString('hex');
   const controllers = new Set();
@@ -46,7 +47,10 @@ export async function startAdapter({ apiKey, upstreamURL = UPSTREAM_URL, fetchIm
       if (req.method === 'GET' && path === '/v1/models') return sendJSON(res, 200, modelCatalog());
       if (req.method !== 'POST' || path !== '/v1/responses') return sendJSON(res, 404, { error: { message: 'Route not supported. Codex uses local model-based compaction.' } });
       if (req.headers['content-encoding'] && req.headers['content-encoding'] !== 'identity') throw new CompatibilityError('Compressed requests are unsupported. Disable enable_request_compression for Clover.');
-      const { body, aliases } = translateRequest(await readJSON(req));
+      const source = await readJSON(req);
+      const sessionId = requestSessionId(source);
+      if (sessionId) onSessionId(sessionId);
+      const { body, aliases } = translateRequest(source);
       timer = setTimeout(() => controller.abort(new Error('Upstream request timed out after 180 seconds.')), 180000);
       const upstream = await fetchImpl(`${upstreamURL}/responses`, {
         method: 'POST', headers: { authorization: `Bearer ${apiKey}`, 'content-type': 'application/json', accept: body.stream ? 'text/event-stream' : 'application/json' },

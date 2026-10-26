@@ -35,7 +35,7 @@ diffuspace clover
 ```
 
 From a downloaded release tarball, use
-`npm install -g ./diffuspace-cli-0.1.9.tgz`.
+`npm install -g ./diffuspace-cli-0.1.10.tgz`.
 
 For agent-assisted installation, share
 [INSTALL.md](https://github.com/BoomMccloud/clover-cli/blob/main/INSTALL.md).
@@ -61,6 +61,19 @@ Pass Codex arguments after `--`:
 diffuspace clover -- exec --skip-git-repo-check "Say hello"
 diffuspace clover -- resume
 ```
+
+On a successful interactive exit, the launcher prints a final Clover resume command:
+
+```sh
+diffuspace clover -- resume YOUR_SESSION_ID
+```
+
+Codex's native `codex resume` line may still appear above it. Use the final
+`diffuspace clover` command so the adapter starts again. If no session ID was
+observed (for example, you exited before sending a message), the launcher prints
+`diffuspace clover -- resume` to open the picker. Exec/JSON runs do not get this
+footer. IDs are read from native request metadata; no transcript scanning or
+additional session-state file is used.
 
 The launcher preserves the current working directory and Codex's normal permission
 checks. It does not add automatic approval or disable sandboxing. The adapter stops

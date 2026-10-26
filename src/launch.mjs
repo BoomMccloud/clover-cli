@@ -4,6 +4,7 @@ import { constants } from 'node:os';
 import { paths, readSavedKey, saveKey, verifyKey, writeCodexConfig, hiddenKey } from './config.mjs';
 import { startAdapter } from './adapter.mjs';
 import { launchMessage, setupMessage, nextTip, sessionReporter, doctorIntro, doctorSuccess } from './messages.mjs';
+import { resumeHint, showResumeHint, validSessionId } from './session.mjs';
 import { MANAGED_MARKER, MODEL_ID, TESTED_CODEX_VERSION } from './constants.mjs';
 
 export function codexVersion(env = process.env) {
@@ -34,7 +35,8 @@ export async function launch(forwarded, { reset = false, env = process.env } = {
   const p = paths(env);
   const apiKey = await obtainKey(p, { reset, env });
   await writeCodexConfig(p);
-  const adapter = await startAdapter({ apiKey, onError: sessionReporter() });
+  let sessionId = forwarded[0] === 'resume' ? validSessionId(forwarded[1]) : null;
+  const adapter = await startAdapter({ apiKey, onError: sessionReporter(), onSessionId: id => { sessionId ||= id; } });
   const childEnv = { ...env, DIFFUSPACE_ADAPTER_TOKEN: adapter.token };
   delete childEnv.DIFFUSPACE_API_KEY;
   const signals = new Map();
@@ -46,10 +48,12 @@ export async function launch(forwarded, { reset = false, env = process.env } = {
       const handler = () => { if (child.exitCode === null && child.signalCode === null) child.kill(signal); };
       signals.set(signal, handler); process.on(signal, handler);
     }
-    return await new Promise((resolve, reject) => {
+    const exitCode = await new Promise((resolve, reject) => {
       child.once('error', reject);
       child.once('exit', (code, signal) => resolve(code ?? 128 + (constants.signals[signal] || 1)));
     });
+    if (exitCode === 0 && showResumeHint(forwarded)) process.stderr.write(resumeHint(sessionId));
+    return exitCode;
   } finally {
     signals.forEach((handler, signal) => process.removeListener(signal, handler));
     await adapter.close();
